@@ -18,7 +18,11 @@ export const BookRepository = {
             include: {
                 genres: true,
                 tags: true,
-                chapters: true,
+                chapters: {
+                    orderBy: {
+                        order: 'asc',  // or 'desc' if you want descending order
+                    },
+                },
                 characters: true,
             },
         }),
@@ -56,6 +60,25 @@ export const BookRepository = {
         });
     },
 
+    createChapter: async (bookId: number, chapterData: Prisma.ChapterCreateInput) => {
+        let orderToSet = chapterData.order ?? 0;
+
+        if (!orderToSet || orderToSet === 0) {
+            // Count existing chapters for this book
+            const chapterCount = await prisma.chapter.count({
+                where: { bookId },
+            });
+            orderToSet = chapterCount + 1;
+        }
+
+        return prisma.chapter.create({
+            data: {
+                ...chapterData,
+                order: orderToSet,
+                book: { connect: { id: bookId } },
+            },
+        });
+    }
     assignTags: (bookId: number, tagIds: number[]) => {
         return prisma.book.update({
             where: {id: bookId},

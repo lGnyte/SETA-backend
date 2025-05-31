@@ -40,6 +40,7 @@ model Book {
   id        Int     @id @default(autoincrement())
   title     String
   ownerId   Int
+  coverUrl  String?
   finished  Boolean @default(false)
   aiEnabled Boolean @default(false)
 
@@ -105,6 +106,7 @@ model Character {
   bookId      Int
   name        String
   description String?
+  avatarUrl   String?
 
   book   Book             @relation(fields: [bookId], references: [id])
   traits CharacterTrait[] @relation("CharacterTraits")

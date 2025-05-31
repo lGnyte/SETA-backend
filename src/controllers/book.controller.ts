@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { BookService } from '../services/book.service';
 import { sendResponse } from "../utils/response";
+import {CharacterService} from "../services/character.service";
 
 // GET /books
 export const getAllBooksController = async (_req: Request, res: Response) => {
@@ -198,3 +199,20 @@ export const assignGenresController = async (req: Request, res: Response): Promi
         sendResponse(res, null, false, `Failed to assign genres: ${err.message || err}`, 500);
     }
 };
+
+export const uploadBookCoverController  = async (req: Request, res: Response) =>{
+    const bookId = Number(req.params.id);
+    const {base64} = req.body;
+
+    if (isNaN(bookId)) {
+        sendResponse(res, null, false, 'Invalid book ID', 400);
+        return;
+    }
+    try {
+        const coverUrl = await BookService.uploadCover(bookId, base64);
+        sendResponse(res, {coverUrl}, true, 'Cover generated successfully');
+    } catch (err) {
+        console.error(`[POST /books/${bookId}/uploadCover]`, err);
+        sendResponse(res, null, false, 'Failed to upload cover', 500);
+    }
+}

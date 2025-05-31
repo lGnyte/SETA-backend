@@ -96,3 +96,22 @@ export const patchBookController = async (req: Request, res: Response): Promise<
     res.status(400).json({ message: 'Failed to patch book', error: err });
   }
 };
+
+export const createBookChapterController =  async (req: Request, res: Response) => {
+  try {
+    const bookId = Number(req.params.id);
+    if (isNaN(bookId)) {
+      res.status(400).json({message: 'Invalid book ID'});
+    }
+
+    // Assuming the request body contains chapter data except bookId
+    const chapterData = req.body;
+
+    const newChapter = await BookService.createBookChapter(bookId, chapterData);
+
+    res.status(201).json(newChapter);
+  } catch (error) {
+    console.error('Failed to create chapter:', error);
+    res.status(500).json({message: 'Internal server error'});
+  }
+}

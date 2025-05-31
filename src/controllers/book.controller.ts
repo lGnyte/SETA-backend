@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 import {BookService} from '../services/book.service';
-import {ApiResponse, sendResponse} from "../utils/response";
+import {sendResponse} from "../utils/response";
 
 // GET /books
 export const getAllBooksController = async (_req: Request, res: Response) => {

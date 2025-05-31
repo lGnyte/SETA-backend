@@ -6,7 +6,9 @@ import {
   updateBookController,
   deleteBookController,
   patchBookController,
-  createBookChapterController
+  createBookChapterController,
+  getBookChaptersController,
+  getCharactersByBookIdController
 } from '../controllers/book.controller';
 import {
  createCharacterController
@@ -22,4 +24,6 @@ router.delete('/:id', deleteBookController);
 router.patch('/:id', patchBookController);
 router.post('/:bookId/characters', createCharacterController);
 router.post('/:id/chapters', createBookChapterController)
+router.get('/:id/chapters', getBookChaptersController);
+router.get('/:id/characters', getCharactersByBookIdController);
 export default router;

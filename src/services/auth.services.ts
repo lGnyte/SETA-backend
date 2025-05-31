@@ -1,7 +1,7 @@
-import { PrismaClient } from '../generated/prisma'
+import {PrismaClient} from '../generated/prisma'
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../config/dotenv.config';
+import jwt, {SignOptions} from 'jsonwebtoken';
+import {JWT_SECRET} from '../config/dotenv.config';
 
 const prisma = new PrismaClient();
 
@@ -33,10 +33,12 @@ export const registerUser = async ({
 
 export const loginUser = async ({
   email,
-  password,
+  password, 
+  rememberMe = false,
 }: {
   email: string;
   password: string;
+  rememberMe?: boolean;
 }) => {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) {
@@ -48,10 +50,18 @@ export const loginUser = async ({
     throw new Error('Invalid password');
   }
 
-  return generateToken(user.id, user.email, user.username);
+  return generateToken(user.id, user.email, user.username, !rememberMe);
 };
 
-const generateToken = (id: number, email: string, username: string) :string => {
-  const token = jwt.sign({ id, email, username }, JWT_SECRET, { expiresIn: '20h' });
-  return token;
+const generateToken = (id: number, email: string, username: string, doExpire = true) :string => {
+  if (!JWT_SECRET) {
+    throw new Error('JWT secret not set');
+  }
+  
+  let options : SignOptions = {};
+  if (doExpire) {
+    options.expiresIn = '20h';
+  }
+
+  return jwt.sign({id, email, username}, JWT_SECRET, options);
 };

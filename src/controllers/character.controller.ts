@@ -1,24 +1,24 @@
 import { Request, Response } from 'express';
 import { CharacterService } from '../services/character.service';
-
+import { sendResponse } from '../utils/response';
 
 export const getCharacterByIdController = async (req: Request, res: Response): Promise<void> => {
   const id = Number(req.params.id);
   if (isNaN(id)) {
-    res.status(400).json({ message: 'Invalid character ID' });
+    sendResponse(res, null, false, 'Invalid character ID', 400);
     return;
   }
 
   try {
     const character = await CharacterService.getById(id);
     if (!character) {
-      res.status(404).json({ message: 'Character not found' });
+      sendResponse(res, null, false, 'Character not found', 404);
       return;
     }
-    res.json(character);
+    sendResponse(res, character);
   } catch (err: unknown) {
     console.error(`[GET /characters/${id}]`, err);
-    res.status(500).json({ message: 'Internal server error' });
+    sendResponse(res, null, false, 'Internal server error', 500);
   }
 };
 
@@ -26,17 +26,17 @@ export const getCharacterByIdController = async (req: Request, res: Response): P
 export const createCharacterController = async (req: Request, res: Response): Promise<void> => {
   const bookId = Number(req.params.bookId);
   if (isNaN(bookId)) {
-    res.status(400).json({ message: 'Invalid book ID' });
+    sendResponse(res, null, false, 'Invalid book ID', 400);
     return;
   }
 
   const data = req.body;
   try {
     const newCharacter = await CharacterService.create(bookId, data);
-    res.status(201).json(newCharacter);
+    sendResponse(res, newCharacter, true, null, 201);
   } catch (err: unknown) {
     console.error(`[POST /books/${bookId}/characters]`, err);
-    res.status(500).json({ message: 'Internal server error' });
+    sendResponse(res, null, false, 'Internal server error', 500);
   }
 };
 
@@ -44,7 +44,7 @@ export const createCharacterController = async (req: Request, res: Response): Pr
 export const updateCharacterController = async (req: Request, res: Response): Promise<void> => {
   const id = Number(req.params.id);
   if (isNaN(id)) {
-    res.status(400).json({ message: 'Invalid character ID' });
+    sendResponse(res, null, false, 'Invalid character ID', 400);
     return;
   }
 
@@ -52,13 +52,13 @@ export const updateCharacterController = async (req: Request, res: Response): Pr
   try {
     const updatedCharacter = await CharacterService.update(id, data);
     if (!updatedCharacter) {
-      res.status(404).json({ message: 'Character not found' });
+      sendResponse(res, null, false, 'Character not found', 404);
       return;
     }
-    res.json(updatedCharacter);
+    sendResponse(res, updatedCharacter);
   } catch (err: unknown) {
     console.error(`[PUT /characters/${id}]`, err);
-    res.status(500).json({ message: 'Internal server error' });
+    sendResponse(res, null, false, 'Internal server error', 500);
   }
 };
 
@@ -66,16 +66,15 @@ export const updateCharacterController = async (req: Request, res: Response): Pr
 export const deleteCharacterController = async (req: Request, res: Response): Promise<void> => {
   const id = Number(req.params.id);
   if (isNaN(id)) {
-    res.status(400).json({ message: 'Invalid character ID' });
+    sendResponse(res, null, false, 'Invalid character ID', 400);
     return;
   }
 
   try {
     await CharacterService.delete(id);
-    res.status(204).send(); // No content
+    res.status(204).send();
   } catch (err: unknown) {
     console.error(`[DELETE /characters/${id}]`, err);
-    res.status(500).json({ message: 'Internal server error' });
+    sendResponse(res, null, false, 'Internal server error', 500);
   }
 };
-

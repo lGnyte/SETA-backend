@@ -3,6 +3,7 @@ import {
   getUsersController,
   loginController,
   registerController,
+  getMeController
 } from '../controllers/user.controller';
 import { authenticate } from '../middlewares/auth.middleware';
 
@@ -12,10 +13,6 @@ const router = Router();
 router.get('/', getUsersController);
 router.post('/register', registerController);
 router.post('/login', loginController);
-
-// protected route (requires JWT)
-router.get('/profile', authenticate, (req, res) => {
-  res.json({ user: (req as any).user });
-});
+router.get('/me', authenticate, getMeController);
 
 export default router;

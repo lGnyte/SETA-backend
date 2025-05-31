@@ -151,3 +151,49 @@ export const getCharactersByBookIdController = async (req: Request, res: Respons
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+export const assignTagsController = async (req: Request, res: Response): Promise<void> => {
+  const bookId = Number(req.params.id);
+  const { tagIds } = req.body;
+
+  if (isNaN(bookId)) {
+    res.status(400).json({ message: 'Invalid book ID' });
+    return;
+  }
+
+  if (!Array.isArray(tagIds) || !tagIds.every(id => typeof id === 'number')) {
+    res.status(400).json({ message: 'Invalid tagIds: must be an array of numbers' });
+    return;
+  }
+
+  try {
+    const updatedBook = await BookService.assignTags(bookId, tagIds);
+    res.status(200).json({ message: 'Tags assigned successfully', book: updatedBook });
+  } catch (err) {
+    console.error(`[POST /books/${bookId}/tags]`, err);
+    res.status(500).json({ message: 'Failed to assign tags to book', error: err });
+  }
+};
+
+// POST /books/:id/genres
+export const assignGenresController = async (req: Request, res: Response): Promise<void> => {
+  const bookId = Number(req.params.id);
+  const { genreIds } = req.body;
+
+  if (isNaN(bookId)) {
+    res.status(400).json({ message: 'Invalid book ID' });
+    return;
+  }
+
+  if (!Array.isArray(genreIds) || !genreIds.every(id => typeof id === 'number')) {
+    res.status(400).json({ message: 'Invalid genreIds: must be an array of numbers' });
+    return;
+  }
+
+  try {
+    const updatedBook = await BookService.assignGenres(bookId, genreIds);
+    res.status(200).json({ message: 'Genres assigned successfully', book: updatedBook });
+  } catch (err) {
+    console.error(`[POST /books/${bookId}/genres]`, err);
+    res.status(500).json({ message: 'Failed to assign genres to book', error: err });
+  }
+};

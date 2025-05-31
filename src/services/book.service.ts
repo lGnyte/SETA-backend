@@ -25,4 +25,8 @@ export const BookService = {
   getCharactersByBookId: (bookId: number) => {
     return BookRepository.getCharactersByBookId(bookId);
   },
+  
+  assignTags: (bookId: number, tagIds: number[]) => BookRepository.assignTags(bookId, tagIds),
+
+  assignGenres: (bookId: number, genreIds: number[]) => BookRepository.assignGenres(bookId, genreIds),
 };

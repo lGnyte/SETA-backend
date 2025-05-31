@@ -18,12 +18,15 @@ model User {
   password String
   walletId String? @unique
 
-  wallet   Wallet?   @relation(fields: [walletId], references: [id])
-  books    Book[] //owned books
-  chapters Chapter[] @relation("UserChapterContributions") //contributed chapters
+  wallet            Wallet?   @relation(fields: [walletId], references: [id])
+  books             Book[] // owned books
+  chapters          Chapter[] @relation("UserChapterContributions") // contributed chapters
+  requestedChapters Chapter[] @relation("UserChapterEditRequests") // requested chapters
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  chapterId Int?
+  Chapter   Chapter? @relation(fields: [chapterId], references: [id])
 }
 
 model Wallet {
@@ -72,14 +75,16 @@ model Chapter {
   summary  String?
   deadline DateTime?
 
-  book         Book          @relation(fields: [bookId], references: [id])
-  contributors User[]        @relation("UserChapterContributions")
-  characters   Character[]   @relation("ChapterCharacters")
-  pages        ChapterPart[]
-  tags         Tag[]         @relation("ChapterTags")
+  book           Book          @relation(fields: [bookId], references: [id])
+  contributors   User[]        @relation("UserChapterContributions")
+  editRequesters User[]        @relation("UserChapterEditRequests")
+  characters     Character[]   @relation("ChapterCharacters")
+  pages          ChapterPart[]
+  tags           Tag[]         @relation("ChapterTags")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  User      User[]
 }
 
 model ChapterPart {

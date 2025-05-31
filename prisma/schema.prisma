@@ -26,7 +26,6 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   chapterId Int?
-  Chapter   Chapter? @relation(fields: [chapterId], references: [id])
 }
 
 model Wallet {
@@ -69,7 +68,6 @@ model Tag {
 model Chapter {
   id       Int       @id @default(autoincrement())
   bookId   Int
-  authorId Int
   title    String
   content  String
   summary  String?
@@ -84,7 +82,6 @@ model Chapter {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  User      User[]
 }
 
 model ChapterPart {

@@ -1,8 +1,16 @@
 import { Request, Response } from 'express';
 import { ChapterPartService } from "../services/chapterPart.service";
+import {sendResponse} from "../utils/response";
 
 export const createChapterPartController = async (req: Request, res: Response) => {
   try {
+    const userId = (req as any).user?.id;
+
+    if (!userId) {
+      sendResponse(res, null, false, 'Unauthorized', 401);
+      return;
+    }
+
     const chapterId = Number(req.params.id);
     if (isNaN(chapterId)) {
       res.status(400).json({ message: 'Invalid chapter ID' });
@@ -11,7 +19,7 @@ export const createChapterPartController = async (req: Request, res: Response) =
 
     const chapterPartData = req.body;
 
-    const newChapterPart = await ChapterPartService.createChapterPart(chapterId, chapterPartData);
+    const newChapterPart = await ChapterPartService.createChapterPart(chapterId, userId, chapterPartData);
 
     res.status(201).json(newChapterPart);
   } catch (error) {

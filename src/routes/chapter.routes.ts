@@ -5,7 +5,7 @@ import {
     deleteChapterController
 } from '../controllers/chapter.controller';
 
-import {createChapterPartController} from '../controllers/chapterPart.controller';
+import {getChapterPartsController,createChapterPartController} from '../controllers/chapterPart.controller';
 import {authenticate} from "../middlewares/auth.middleware";
 
 const router = Router();
@@ -15,5 +15,6 @@ router.put('/:id', updateChapterController);
 router.delete('/:id', deleteChapterController);
 
 router.post('/:id/parts', authenticate, createChapterPartController)
+router.get('/:id/parts', getChapterPartsController);
 
 export default router;

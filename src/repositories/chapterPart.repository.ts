@@ -23,4 +23,25 @@ export const ChapterPartRepository = {
             },
         });
     },
+
+     getByChapterId: (chapterId: number) => {
+    return prisma.chapterPart.findMany({
+      where: { chapterId },
+      include: { author: true },
+      orderBy: { order: 'asc' },
+    });
+  },
+  update: (id: number, data: Prisma.ChapterPartUpdateInput) => {
+    return prisma.chapterPart.update({
+      where: { id },
+      data,
+    });
+  },
+
+   delete: (id: number) => {
+    return prisma.chapterPart.delete({
+      where: { id },
+    });
+  },
 }
+

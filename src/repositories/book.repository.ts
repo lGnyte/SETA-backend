@@ -98,4 +98,28 @@ export const BookRepository = {
       },
     });
   },
+    
+    assignTags: (bookId: number, tagIds: number[]) => {
+        return prisma.book.update({
+            where: {id: bookId},
+            data: {
+                tags: {
+                    set: [],
+                    connect: tagIds.map((id) => ({id})),
+                },
+            },
+        });
+    },
+
+    assignGenres: (bookId: number, genreIds: number[]) => {
+        return prisma.book.update({
+            where: {id: bookId},
+            data: {
+                genres: {
+                    set: [],
+                    connect: genreIds.map((id) => ({id})),
+                },
+            },
+        });
+    },
 };

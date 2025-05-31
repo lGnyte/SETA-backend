@@ -1,6 +1,13 @@
-import {PrismaClient, Prisma} from '../generated/prisma';
+import { PrismaClient, Prisma } from '../generated/prisma';
 
 const prisma = new PrismaClient();
+
+async function ensureBookExists(bookId: number) {
+    const exists = await prisma.book.findUnique({ where: { id: bookId }, select: { id: true } });
+    if (!exists) {
+        throw new Error(`Book with ID ${bookId} not found`);
+    }
+}
 
 export const BookRepository = {
     getAll: () => prisma.book.findMany({
@@ -12,20 +19,20 @@ export const BookRepository = {
         },
     }),
 
-    getById: (id: number) =>
-        prisma.book.findUnique({
-            where: {id},
+    getById: async (id: number) => {
+        await ensureBookExists(id);
+        return prisma.book.findUnique({
+            where: { id },
             include: {
                 genres: true,
                 tags: true,
                 chapters: {
-                    orderBy: {
-                        order: 'asc', 
-                    },
+                    orderBy: { order: 'asc' },
                 },
                 characters: true,
             },
-        }),
+        });
+    },
 
     create: (data: Prisma.BookCreateInput) =>
         prisma.book.create({
@@ -38,9 +45,10 @@ export const BookRepository = {
             },
         }),
 
-    update: (id: number, data: Prisma.BookUpdateInput) =>
-        prisma.book.update({
-            where: {id},
+    update: async (id: number, data: Prisma.BookUpdateInput) => {
+        await ensureBookExists(id);
+        return prisma.book.update({
+            where: { id },
             data,
             include: {
                 genres: true,
@@ -48,23 +56,28 @@ export const BookRepository = {
                 chapters: true,
                 characters: true,
             },
-        }),
+        });
+    },
 
-    delete: (id: number) =>
-        prisma.book.delete({where: {id}}),
+    delete: async (id: number) => {
+        await ensureBookExists(id);
+        return prisma.book.delete({ where: { id } });
+    },
 
     patch: async (id: number, data: Prisma.BookUpdateInput) => {
+        await ensureBookExists(id);
         return prisma.book.update({
-            where: {id},
+            where: { id },
             data,
         });
     },
 
     createChapter: async (bookId: number, chapterData: Prisma.ChapterCreateInput) => {
+        await ensureBookExists(bookId);
+
         let orderToSet = chapterData.order ?? 0;
 
         if (!orderToSet || orderToSet === 0) {
-            // Count existing chapters for this book
             const chapterCount = await prisma.chapter.count({
                 where: { bookId },
             });
@@ -80,44 +93,48 @@ export const BookRepository = {
         });
     },
 
-    getChapters: (bookId: number) => {
-    return prisma.chapter.findMany({
-      where: { bookId },
-      include: {
-        characters: true,
-      },
-    });
-  },
+    getChapters: async (bookId: number) => {
+        await ensureBookExists(bookId);
+        return prisma.chapter.findMany({
+            where: { bookId },
+            include: {
+                characters: true,
+            },
+        });
+    },
 
-  getCharactersByBookId: (bookId: number) => {
-    return prisma.character.findMany({
-      where: { bookId },
-      include: {
-        traits: true, 
-        book: true,   
-      },
-    });
-  },
-    
-    assignTags: (bookId: number, tagIds: number[]) => {
+    getCharactersByBookId: async (bookId: number) => {
+        await ensureBookExists(bookId);
+        return prisma.character.findMany({
+            where: { bookId },
+            include: {
+                traits: true,
+                book: true,
+            },
+        });
+    },
+
+    assignTags: async (bookId: number, tagIds: number[]) => {
+        await ensureBookExists(bookId);
         return prisma.book.update({
-            where: {id: bookId},
+            where: { id: bookId },
             data: {
                 tags: {
                     set: [],
-                    connect: tagIds.map((id) => ({id})),
+                    connect: tagIds.map((id) => ({ id })),
                 },
             },
         });
     },
 
-    assignGenres: (bookId: number, genreIds: number[]) => {
+    assignGenres: async (bookId: number, genreIds: number[]) => {
+        await ensureBookExists(bookId);
         return prisma.book.update({
-            where: {id: bookId},
+            where: { id: bookId },
             data: {
                 genres: {
                     set: [],
-                    connect: genreIds.map((id) => ({id})),
+                    connect: genreIds.map((id) => ({ id })),
                 },
             },
         });

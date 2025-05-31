@@ -1,10 +1,21 @@
 import express from 'express';
 import routes from './routes/routes';
 import errorHandler from "./middlewares/errorHandler.middleware";
-import bookRoutes from './routes/book.routes';
-import userRoutes from './routes/user.routes';
+import cors from 'cors';
+import { CORS_ORIGINS } from "./config/dotenv.config";
 
 const app = express();
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || CORS_ORIGINS.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
+}));
 
 app.use(express.json());
 

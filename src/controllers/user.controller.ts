@@ -22,7 +22,7 @@ export const registerController = async (_req: Request, res: Response) => {
     }
 
     const token = await registerUser({ email, password, username });
-    sendResponse(res, { token }, true);
+    sendResponse(res, { token }, true, "User registered!", 201);
   } catch (err) {
     console.error('[POST /register]', err);
     sendResponse(res, null, false, (err as Error).message, 400);

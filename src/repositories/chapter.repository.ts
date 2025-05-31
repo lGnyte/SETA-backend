@@ -7,6 +7,13 @@ export const getChapterById = async (id: number) => {
         where: {
             id: id,
         },
+        include: {
+            chapterParts: {
+                orderBy: {
+                    order: 'asc'
+                },
+            },
+        }
     });
 };
 

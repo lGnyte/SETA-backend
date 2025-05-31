@@ -5,7 +5,9 @@ import {
   createBookController,
   updateBookController,
   deleteBookController,
-  patchBookController
+  patchBookController,
+  assignTagsController,
+  assignGenresController
 } from '../controllers/book.controller';
 
 const router = Router();
@@ -16,5 +18,7 @@ router.post('/', createBookController);
 router.put('/:id', updateBookController);
 router.delete('/:id', deleteBookController);
 router.patch('/:id', patchBookController);
+router.post('/:id/tags', assignTagsController);
+router.post('/:id/genres', assignGenresController);
 
 export default router;

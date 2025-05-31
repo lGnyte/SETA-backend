@@ -16,4 +16,8 @@ export const BookService = {
   delete: (id: number) => BookRepository.delete(id),
 
   patch: (id: number, data: Prisma.BookUpdateInput) => BookRepository.patch(id, data),
+
+  assignTags: (bookId: number, tagIds: number[]) => BookRepository.assignTags(bookId, tagIds),
+
+  assignGenres: (bookId: number, genreIds: number[]) => BookRepository.assignGenres(bookId, genreIds),
 };

@@ -12,8 +12,104 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
+  id       Int     @id @default(autoincrement())
+  username String
+  email    String  @unique
+  password String
+  walletId String? @unique
+
+  wallet   Wallet?   @relation(fields: [walletId], references: [id])
+  books    Book[] //owned books
+  chapters Chapter[] @relation("UserChapterContributions") //contributed chapters
+
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Wallet {
+  id     String @id
+  amount Float  @default(0.0)
+
+  user User?
+}
+
+model Book {
+  id        Int     @id @default(autoincrement())
+  title     String
+  ownerId   Int
+  finished  Boolean @default(false)
+  aiEnabled Boolean @default(false)
+
+  owner      User        @relation(fields: [ownerId], references: [id])
+  genres     Genre[]     @relation("BookGenres")
+  tags       Tag[]       @relation("BookTags")
+  chapters   Chapter[]
+  characters Character[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Genre {
+  id    Int    @id @default(autoincrement())
+  name  String
+  books Book[] @relation("BookGenres")
+}
+
+model Tag {
+  id       Int       @id @default(autoincrement())
+  name     String
+  books    Book[]    @relation("BookTags")
+  chapters Chapter[] @relation("ChapterTags")
+}
+
+model Chapter {
+  id       Int       @id @default(autoincrement())
+  bookId   Int
+  authorId Int
+  title    String
+  content  String
+  summary  String?
+  deadline DateTime?
+
+  book         Book          @relation(fields: [bookId], references: [id])
+  contributors User[]        @relation("UserChapterContributions")
+  characters   Character[]   @relation("ChapterCharacters")
+  pages        ChapterPart[]
+  tags         Tag[]         @relation("ChapterTags")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ChapterPart {
+  id        Int    @id @default(autoincrement())
+  chapterId Int
+  content   String
+
+  chapter Chapter @relation(fields: [chapterId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Character {
+  id          Int     @id @default(autoincrement())
+  bookId      Int
+  name        String
+  description String?
+
+  book   Book             @relation(fields: [bookId], references: [id])
+  traits CharacterTrait[] @relation("CharacterTraits")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  chapters  Chapter[] @relation("ChapterCharacters")
+}
+
+model CharacterTrait {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  character Character[] @relation("CharacterTraits")
 }

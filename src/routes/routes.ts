@@ -3,6 +3,7 @@ import userRoutes from './user.routes';
 import bookRoutes from './book.routes'
 import characterRoutes from './character.routes'
 import chapterRoutes from './chapter.routes';
+import chapterPartRoutes from './chapterParts.routes';
 
 const router = Router();
 
@@ -10,6 +11,7 @@ router.use('/users', userRoutes);
 router.use('/books', bookRoutes);
 router.use('/characters', characterRoutes);
 router.use('/chapters', chapterRoutes);
+router.use('/chapterParts', chapterPartRoutes);
 
 
 export default router;

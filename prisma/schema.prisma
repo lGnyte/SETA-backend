@@ -23,9 +23,10 @@ model User {
   chapters          Chapter[] @relation("UserChapterContributions") // contributed chapters
   requestedChapters Chapter[] @relation("UserChapterEditRequests") // requested chapters
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  chapterId Int?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  chapterId   Int?
+  ChapterPart ChapterPart[]
 }
 
 model Wallet {
@@ -78,7 +79,7 @@ model Chapter {
   contributors   User[]        @relation("UserChapterContributions")
   editRequesters User[]        @relation("UserChapterEditRequests")
   characters     Character[]   @relation("ChapterCharacters")
-  pages          ChapterPart[]
+  chapterParts   ChapterPart[]
   tags           Tag[]         @relation("ChapterTags")
 
   createdAt DateTime @default(now())
@@ -88,10 +89,12 @@ model Chapter {
 model ChapterPart {
   id        Int    @id @default(autoincrement())
   chapterId Int
+  authorId  Int
   order     Int    @default(0)
   content   String
 
   chapter Chapter @relation(fields: [chapterId], references: [id])
+  author  User    @relation(fields: [authorId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

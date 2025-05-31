@@ -30,16 +30,32 @@ export const registerController = async (_req: Request, res: Response) => {
 
 export const loginController = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, rememberMe } = req.body;
     if (!email || !password) {
       res.status(400).json({ message: 'Missing fields' });
       return;
     }
 
-    const token = await loginUser({ email, password });
-    res.json({ token });
+    const token = await loginUser({ email, password, rememberMe });
+    if (!token) {
+      res.status(500).json({message: 'Internal Server Error'});
+    }
+    
+    res.status(200).json({ token });
+    
   } catch (err) {
     console.error('[POST /login]', err);
     res.status(401).json({ message: (err as Error).message });
   }
+};
+
+export const getMeController = (req: Request, res: Response) => {
+  const user = (req as any).user;
+
+  if (!user) {
+    res.status(401).json({ message: 'Unauthorized' });
+    return;
+  }
+
+  res.json(user);
 };

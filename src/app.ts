@@ -8,8 +8,6 @@ app.use(express.json());
 
 app.use('/api', routes);
 
-app.use('/books', bookRoutes);
-
 app.use(errorHandler);
 
 export const listen = (port: any, callback: any) => app.listen(port, callback);

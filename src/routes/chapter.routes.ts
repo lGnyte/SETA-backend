@@ -1,8 +1,14 @@
-import { Router } from 'express';
-import { getChapterByIdController } from '../controllers/chapter.controller';
+import {Router} from 'express';
+import {
+    getChapterByIdController,
+    updateChapterController,
+    deleteChapterController
+} from '../controllers/chapter.controller';
 
 const router = Router();
 
-router.get('/:id', getChapterByIdController); // Or .get('/', ...) if using query param
+router.get('/:id', getChapterByIdController);
+router.put('/:id', updateChapterController);
+router.delete('/:id', deleteChapterController);
 
 export default router;

@@ -1,5 +1,6 @@
 import { BookRepository } from '../repositories/book.repository';
 import { PrismaClient, Prisma } from '../generated/prisma';
+import BookRoutes from "../routes/book.routes";
 
 const prisma = new PrismaClient();
 
@@ -16,4 +17,6 @@ export const BookService = {
   delete: (id: number) => BookRepository.delete(id),
 
   patch: (id: number, data: Prisma.BookUpdateInput) => BookRepository.patch(id, data),
+
+  createBookChapter: (bookId: number, chapterData: Prisma.ChapterCreateInput) => BookRepository.createChapter(bookId, chapterData),
 };

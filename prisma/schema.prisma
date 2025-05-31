@@ -68,6 +68,7 @@ model Tag {
 model Chapter {
   id       Int       @id @default(autoincrement())
   bookId   Int
+  order    Int       @default(0)
   title    String
   content  String
   summary  String?
@@ -87,6 +88,7 @@ model Chapter {
 model ChapterPart {
   id        Int    @id @default(autoincrement())
   chapterId Int
+  order     Int    @default(0)
   content   String
 
   chapter Chapter @relation(fields: [chapterId], references: [id])

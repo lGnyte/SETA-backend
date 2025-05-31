@@ -115,3 +115,39 @@ export const createBookChapterController =  async (req: Request, res: Response) 
     res.status(500).json({message: 'Internal server error'});
   }
 }
+
+export const getBookChaptersController = async (req: Request, res: Response): Promise<void> => {
+  const bookId = Number(req.params.id);
+  if (isNaN(bookId)) {
+    res.status(400).json({ message: 'Invalid book ID' });
+    return;
+  }
+
+  try {
+    const chapters = await BookService.getChapters(bookId);
+    res.json(chapters);
+  } catch (err: unknown) {
+    console.error(`[GET /books/${bookId}/chapters]`, err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+export const getCharactersByBookIdController = async (req: Request, res: Response): Promise<void> => {
+  const bookId = Number(req.params.id);
+  if (isNaN(bookId)) {
+    res.status(400).json({ message: 'Invalid book ID' });
+    return;
+  }
+
+  try {
+    const characters = await BookService.getCharactersByBookId(bookId);
+    if (!characters || characters.length === 0) {
+      res.status(404).json({ message: 'No characters found for this book' });
+      return;
+    }
+    res.json(characters);
+  } catch (error) {
+    console.error(`[GET /books/${bookId}/characters]`, error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};

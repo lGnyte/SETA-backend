@@ -103,33 +103,4 @@ Return only the plot idea text.`;
     }
   },
 
-   generateCharacterImage: async (name: string, description: string): Promise<string> => {
-    const promptText = `Create a detailed, vivid character portrait based on the following description:\nName: ${name}\nDescription: ${description}`;
-
-    try {
-      const model = genAI.getImageModel({
-        model: 'image-alpha-001',  // example model name for image gen
-        generationConfig: {
-          prompt: promptText,
-          size: '512x512',
-          n: 1,
-          // add more params if supported, e.g. style, quality
-        },
-      });
-
-      const result = await model.generateImage();
-      // Assume the result contains URLs of generated images:
-      const imageUrl = result.images?.[0]?.url;
-
-      if (!imageUrl) {
-        throw new Error('No image URL returned from AI');
-      }
-
-      return imageUrl;
-
-    } catch (error) {
-      console.error('Error generating character image:', error);
-      throw new Error('Failed to generate character image');
-    }
-  },
 };

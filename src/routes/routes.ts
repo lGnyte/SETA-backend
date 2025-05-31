@@ -6,7 +6,7 @@ import chapterRoutes from './chapter.routes';
 import chapterPartRoutes from './chapterParts.routes';
 import genreRoutes from './genre.routes'
 import tagRoutes from './tag.routes'
-
+import aiRoutes from './ai.routes'
 const router = Router();
 
 router.use('/users', userRoutes);
@@ -16,5 +16,6 @@ router.use('/chapters', chapterRoutes);
 router.use('/chapterParts', chapterPartRoutes);
 router.use('/genres', genreRoutes);
 router.use('/tags', tagRoutes);
+router.use('/ai', aiRoutes)
 
 export default router;

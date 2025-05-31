@@ -6,11 +6,16 @@ export const getChapterByIdController = async (_req: Request, res: Response) => 
         const { id } = _req.params;
         if (!id || isNaN(Number(id))) {
             res.status(400).json({ message: 'Invalid or missing id parameter' });
+            return;
         }
         const chapter = await ChapterService.getChapterByIdAsync(Number(id));
+        if (!chapter) {
+            res.status(404).json({ message: 'Chapter not found' });
+            return;
+        }
         res.json(chapter);
     } catch (err) {
-        console.error('[GET /users]', err);
+        console.error('[GET /chapters/:id]', err);
         res.status(500).json({ message: 'Internal server error' });
     }
 };

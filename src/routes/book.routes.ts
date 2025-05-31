@@ -10,7 +10,8 @@ import {
   getBookChaptersController,
   getCharactersByBookIdController,
   assignTagsController,
-  assignGenresController
+  assignGenresController,
+  uploadBookCoverController
 } from '../controllers/book.controller';
 import {
  createCharacterController
@@ -30,5 +31,6 @@ router.get('/:id/chapters', getBookChaptersController);
 router.get('/:id/characters', getCharactersByBookIdController);
 router.post('/:id/tags', assignTagsController);
 router.post('/:id/genres', assignGenresController);
+router.post('/:id/cover', uploadBookCoverController);
 
 export default router;

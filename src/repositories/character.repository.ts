@@ -34,4 +34,17 @@ export const CharacterRepository = {
       where: { id },
     });
   },
+
+  ensureCharacterExists: async (characterId: number) => {
+    const character = await prisma.character.findUnique({
+      where: { id: characterId },
+      select: { id: true },
+    });
+
+    if (!character) {
+      throw new Error(`Character with ID ${characterId} not found`);
+    }
+
+    return true;
+  },
 };

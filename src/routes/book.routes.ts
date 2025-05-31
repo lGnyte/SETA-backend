@@ -8,6 +8,9 @@ import {
   patchBookController,
   createBookChapterController
 } from '../controllers/book.controller';
+import {
+ createCharacterController
+} from '../controllers/character.controller';
 
 const router = Router();
 
@@ -17,5 +20,6 @@ router.post('/', createBookController);
 router.put('/:id', updateBookController);
 router.delete('/:id', deleteBookController);
 router.patch('/:id', patchBookController);
+router.post('/:bookId/characters', createCharacterController);
 router.post('/:id/chapters', createBookChapterController)
 export default router;

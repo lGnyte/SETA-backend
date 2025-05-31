@@ -5,7 +5,8 @@ import {
     deleteChapterController,
     requestChapterEditAccessController,
     getChapterEditRequestersController,
-    approveChapterEditRequestController
+    approveChapterEditRequestController,
+    denyEditAccessRequestController
 } from '../controllers/chapter.controller';
 
 import {getChapterPartsController,createChapterPartController} from '../controllers/chapterPart.controller';
@@ -24,6 +25,6 @@ router.get('/:id/parts', getChapterPartsController);
 router.get('/:id/requestEdit', authenticate, requestChapterEditAccessController)
 router.get('/:id/editRequesters', authenticate, getChapterEditRequestersController)
 
-//POST /chapters/:chapterId/approve-edit/:userId
 router.post('/:id/approveEdit/:userId', authenticate, approveChapterEditRequestController)
+router.delete('/:id/denyAccess/:userId', authenticate, denyEditAccessRequestController)
 export default router;

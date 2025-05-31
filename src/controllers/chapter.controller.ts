@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
-import { ChapterService } from '../services/chapter.service';
-import { sendResponse } from '../utils/response';
+import {Request, Response} from 'express';
+import {ChapterService} from '../services/chapter.service';
+import {sendResponse} from '../utils/response';
 
 export const getChapterByIdController = async (_req: Request, res: Response): Promise<void> => {
     try {
-        const { id } = _req.params;
+        const {id} = _req.params;
         if (!id || isNaN(Number(id))) {
             sendResponse(res, null, false, 'Invalid or missing id parameter', 400);
             return;
@@ -63,7 +63,7 @@ export const requestChapterEditAccessController = async (req: Request, res: Resp
 
     const chapterId = Number(req.params.id);
     if (isNaN(chapterId)) {
-        res.status(400).json({ message: 'Invalid chapter ID' });
+        res.status(400).json({message: 'Invalid chapter ID'});
         return;
     }
 
@@ -116,3 +116,21 @@ export const approveChapterEditRequestController = async (req: Request, res: Res
         sendResponse(res, null, false, `Failed to approve edit access to chapter. Reason: ${err instanceof Error ? err.message : String(err)}`, 500);
     }
 };
+
+export const denyEditAccessRequestController = async (req: Request, res: Response): Promise<void> => {
+    const chapterId = Number(req.params.id);
+    const userId = Number(req.params.userId);
+
+    if (isNaN(chapterId) || isNaN(userId)) {
+        sendResponse(res, null, false, 'Invalid chapter ID or user ID', 400);
+        return;
+    }
+
+    try {
+        const result = await ChapterService.denyEditAccessRequest(chapterId, userId);
+        sendResponse(res, result);
+    } catch (err) {
+        console.error(`[Delete /chapters/${chapterId}/denyAccess/${userId}]`, err);
+        sendResponse(res, null, false, `Failed to deny edit access to chapter. Reason: ${err instanceof Error ? err.message : String(err)}`, 500);
+    }
+}

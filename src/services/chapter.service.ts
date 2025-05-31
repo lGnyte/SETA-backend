@@ -4,7 +4,8 @@ import {
     deleteChapter,
     requestChapterEditAccess,
     getChapterEditRequesters,
-    approveChapterEditRequest
+    approveChapterEditRequest,
+    denyEditAccessRequest
 } from '../repositories/chapter.repository';
 import { Prisma } from '../generated/prisma';
 
@@ -14,5 +15,6 @@ export const ChapterService = {
     delete: (id: number) => deleteChapter(id),
     requestChapterEditAccess : (chapterId: number, userId: number) => requestChapterEditAccess(chapterId, userId),
     getChapterEditRequestersController : (chapterId : number) => getChapterEditRequesters(chapterId),
-    approveChapterEditRequest : (chapterId: number, userId: number) => approveChapterEditRequest(chapterId, userId)
+    approveChapterEditRequest : (chapterId: number, userId: number) => approveChapterEditRequest(chapterId, userId),
+    denyEditAccessRequest: (chapterId: number, userId: number) => denyEditAccessRequest(chapterId, userId),
 }

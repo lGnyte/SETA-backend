@@ -144,50 +144,49 @@ export const getCharactersByBookIdController = async (req: Request, res: Respons
         sendResponse(res, null, false, 'Internal server error', 500);
     }
 };
-    
+
 export const assignTagsController = async (req: Request, res: Response): Promise<void> => {
-  const bookId = Number(req.params.id);
-  const { tagIds } = req.body;
+    const bookId = Number(req.params.id);
+    const { tagIds } = req.body;
 
-  if (isNaN(bookId)) {
-    res.status(400).json({ message: 'Invalid book ID' });
-    return;
-  }
+    if (isNaN(bookId)) {
+        sendResponse(res, null, false, 'Invalid book ID', 400);
+        return;
+    }
 
-  if (!Array.isArray(tagIds) || !tagIds.every(id => typeof id === 'number')) {
-    res.status(400).json({ message: 'Invalid tagIds: must be an array of numbers' });
-    return;
-  }
+    if (!Array.isArray(tagIds) || !tagIds.every(id => typeof id === 'number')) {
+        sendResponse(res, null, false, 'Invalid tagIds: must be an array of numbers', 400);
+        return;
+    }
 
-  try {
-    const updatedBook = await BookService.assignTags(bookId, tagIds);
-    res.status(200).json({ message: 'Tags assigned successfully', book: updatedBook });
-  } catch (err) {
-    console.error(`[POST /books/${bookId}/tags]`, err);
-    res.status(500).json({ message: 'Failed to assign tags to book', error: err });
-  }
+    try {
+        const updatedBook = await BookService.assignTags(bookId, tagIds);
+        sendResponse(res, updatedBook, true, 'Tags assigned successfully');
+    } catch (err) {
+        console.error(`[POST /books/${bookId}/tags]`, err);
+        sendResponse(res, null, false, 'Failed to assign tags to book', 500);
+    }
 };
 
-// POST /books/:id/genres
 export const assignGenresController = async (req: Request, res: Response): Promise<void> => {
-  const bookId = Number(req.params.id);
-  const { genreIds } = req.body;
+    const bookId = Number(req.params.id);
+    const { genreIds } = req.body;
 
-  if (isNaN(bookId)) {
-    res.status(400).json({ message: 'Invalid book ID' });
-    return;
-  }
+    if (isNaN(bookId)) {
+        sendResponse(res, null, false, 'Invalid book ID', 400);
+        return;
+    }
 
-  if (!Array.isArray(genreIds) || !genreIds.every(id => typeof id === 'number')) {
-    res.status(400).json({ message: 'Invalid genreIds: must be an array of numbers' });
-    return;
-  }
+    if (!Array.isArray(genreIds) || !genreIds.every(id => typeof id === 'number')) {
+        sendResponse(res, null, false, 'Invalid genreIds: must be an array of numbers', 400);
+        return;
+    }
 
-  try {
-    const updatedBook = await BookService.assignGenres(bookId, genreIds);
-    res.status(200).json({ message: 'Genres assigned successfully', book: updatedBook });
-  } catch (err) {
-    console.error(`[POST /books/${bookId}/genres]`, err);
-    res.status(500).json({ message: 'Failed to assign genres to book', error: err });
-  }
+    try {
+        const updatedBook = await BookService.assignGenres(bookId, genreIds);
+        sendResponse(res, updatedBook, true, 'Genres assigned successfully');
+    } catch (err) {
+        console.error(`[POST /books/${bookId}/genres]`, err);
+        sendResponse(res, null, false, 'Failed to assign genres to book', 500);
+    }
 };

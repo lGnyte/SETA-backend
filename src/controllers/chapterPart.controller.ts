@@ -4,6 +4,13 @@ import { sendResponse } from '../utils/response';
 
 export const createChapterPartController = async (req: Request, res: Response): Promise<void> => {
     try {
+        const userId = (req as any).user?.id;
+
+        if (!userId) {
+            sendResponse(res, null, false, 'Unauthorized', 401);
+            return;
+        }
+
         const chapterId = Number(req.params.id);
         if (isNaN(chapterId)) {
             sendResponse(res, null, false, 'Invalid chapter ID', 400);
@@ -11,7 +18,7 @@ export const createChapterPartController = async (req: Request, res: Response): 
         }
 
         const chapterPartData = req.body;
-        const newChapterPart = await ChapterPartService.createChapterPart(chapterId, chapterPartData);
+        const newChapterPart = await ChapterPartService.createChapterPart(chapterId, userId, chapterPartData);
 
         sendResponse(res, newChapterPart, true, null, 201);
     } catch (error) {

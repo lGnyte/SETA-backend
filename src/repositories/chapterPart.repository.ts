@@ -3,7 +3,7 @@ import {PrismaClient, Prisma} from '../generated/prisma';
 const prisma = new PrismaClient();
 
 export const ChapterPartRepository = {
-    createChapterPart: async (chapterId: number, chapterPartData: Prisma.ChapterPartCreateInput & { order?: number }) => {
+    createChapterPart: async (chapterId: number, authorId: number, chapterPartData: Prisma.ChapterPartCreateInput & { order?: number }) => {
         let orderToSet = chapterPartData.order ?? 0;
 
         if (!orderToSet || orderToSet === 0) {
@@ -19,6 +19,7 @@ export const ChapterPartRepository = {
                 ...chapterPartData,
                 order: orderToSet,
                 chapter: { connect: { id: chapterId } },
+                author: { connect: { id: authorId } },
             },
         });
     },

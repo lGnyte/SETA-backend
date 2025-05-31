@@ -20,7 +20,7 @@ export const BookRepository = {
                 tags: true,
                 chapters: {
                     orderBy: {
-                        order: 'asc',  // or 'desc' if you want descending order
+                        order: 'asc', 
                     },
                 },
                 characters: true,
@@ -78,7 +78,27 @@ export const BookRepository = {
                 book: { connect: { id: bookId } },
             },
         });
-    }
+    },
+
+    getChapters: (bookId: number) => {
+    return prisma.chapter.findMany({
+      where: { bookId },
+      include: {
+        characters: true,
+      },
+    });
+  },
+
+  getCharactersByBookId: (bookId: number) => {
+    return prisma.character.findMany({
+      where: { bookId },
+      include: {
+        traits: true, 
+        book: true,   
+      },
+    });
+  },
+    
     assignTags: (bookId: number, tagIds: number[]) => {
         return prisma.book.update({
             where: {id: bookId},

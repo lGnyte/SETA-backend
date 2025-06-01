@@ -11,11 +11,13 @@ import {
   getCharactersByBookIdController,
   assignTagsController,
   assignGenresController,
-  uploadBookCoverController
+  uploadBookCoverController,
+  getMyBooks
 } from '../controllers/book.controller';
 import {
  createCharacterController
 } from '../controllers/character.controller';
+import {authenticate} from "../middlewares/auth.middleware";
 
 const router = Router();
 
@@ -32,5 +34,6 @@ router.get('/:id/characters', getCharactersByBookIdController);
 router.post('/:id/tags', assignTagsController);
 router.post('/:id/genres', assignGenresController);
 router.post('/:id/cover', uploadBookCoverController);
+router.get('/mybooks', authenticate, getMyBooks);
 
 export default router;

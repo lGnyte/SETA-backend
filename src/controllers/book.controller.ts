@@ -215,4 +215,23 @@ export const uploadBookCoverController  = async (req: Request, res: Response) =>
         console.error(`[POST /books/${bookId}/uploadCover]`, err);
         sendResponse(res, null, false, 'Failed to upload cover', 500);
     }
-}
+    
+};
+
+export const getMyBooks = async (req: Request, res: Response): Promise<void> => {
+  const userId = (req as any).user?.id;
+
+  if (!userId) {
+    sendResponse(res, null, false, 'Unauthorized', 401);
+    return;
+  }
+
+  try {
+    const books = await BookService.getBooksByOwnerId(userId);
+    sendResponse(res, books, true);
+  } catch (err) {
+    console.error('[GET /mybooks]', err);
+    sendResponse(res, null, false, 'Failed to fetch user books', 500);
+  }
+};
+

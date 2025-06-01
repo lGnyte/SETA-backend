@@ -1,8 +1,8 @@
-import {BookRepository, ensureBookExists} from '../repositories/book.repository';
-import {PrismaClient, Prisma} from '../generated/prisma';
+import { BookRepository, ensureBookExists } from '../repositories/book.repository';
+import { PrismaClient, Prisma } from '../generated/prisma';
 import BookRoutes from "../routes/book.routes";
-import {CharacterRepository} from "../repositories/character.repository";
-import {AzureBlobService} from "./blobStorage.service";
+import { CharacterRepository } from "../repositories/character.repository";
+import { AzureBlobService } from "./blobStorage.service";
 
 const prisma = new PrismaClient();
 
@@ -35,11 +35,16 @@ export const BookService = {
     async uploadCover(bookId: number, base64: string): Promise<string> {
         await ensureBookExists(bookId);
 
-        const {url} = await AzureBlobService.uploadBase64File(base64, 'covers');
+        const { url } = await AzureBlobService.uploadBase64File(base64, 'covers');
 
         // Update character record with avatar URL
-        await BookRepository.update(bookId, {coverUrl: url});
+        await BookRepository.update(bookId, { coverUrl: url });
 
         return url;
-    }
+    },
+
+    getBooksByOwnerId: async (ownerId: number) => {
+        return await BookRepository.getByOwnerId(ownerId);
+    },
+
 };

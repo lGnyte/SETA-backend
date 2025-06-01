@@ -1,14 +1,15 @@
-
 import { Request, Response } from 'express';
 import { GenreService } from '../services/genre.service';
+import {sendResponse} from "../utils/response";
 
 export const getAllGenres = async (req: Request, res: Response): Promise<void> => {
   try {
     const genres = await GenreService.getAllGenres();
-    res.json(genres); // direct return
+    sendResponse(res, genres, true, "", 200);
   } catch (error) {
     console.error('[GET /genres]', error);
-    res.status(500).json({ error: 'Failed to fetch genres' });
+    res.status(500).json();
+    sendResponse(res, null, false, 'Failed to fetch genres', 500);
   }
 };
 

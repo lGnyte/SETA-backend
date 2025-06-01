@@ -16,6 +16,11 @@ export const BookRepository = {
             tags: true,
             chapters: true,
             characters: true,
+            owner: {
+                select: {
+                    username: true,
+                }
+            }
         },
     }),
 

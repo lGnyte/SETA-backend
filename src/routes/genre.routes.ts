@@ -1,6 +1,7 @@
 import express from 'express';
-import { getAllGenres } from '../controllers/genre.controller';
+import { getAllGenres,createGenre  } from '../controllers/genre.controller';
 
 const router = express.Router();
 router.get('/', getAllGenres);
+router.post('/', createGenre);
 export default router;

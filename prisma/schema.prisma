@@ -37,12 +37,13 @@ model Wallet {
 }
 
 model Book {
-  id        Int     @id @default(autoincrement())
-  title     String
-  ownerId   Int
-  coverUrl  String?
-  finished  Boolean @default(false)
-  aiEnabled Boolean @default(false)
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+  ownerId     Int
+  coverUrl    String?
+  finished    Boolean @default(false)
+  aiEnabled   Boolean @default(false)
 
   owner      User        @relation(fields: [ownerId], references: [id])
   genres     Genre[]     @relation("BookGenres")

@@ -2,6 +2,8 @@ import {PrismaClient} from '../generated/prisma'
 import bcrypt from 'bcrypt';
 import jwt, {SignOptions} from 'jsonwebtoken';
 import {JWT_SECRET} from '../config/dotenv.config';
+import { v4 as uuidv4 } from 'uuid';
+
 
 const prisma = new PrismaClient();
 
@@ -25,6 +27,16 @@ export const registerUser = async ({
       email,
       password: hashedPassword,
       username,
+    },
+  });
+
+  await prisma.wallet.create({
+    data: {
+      id: uuidv4(), // generate UUID here explicitly
+      amount: 12.0,
+      user: {
+        connect: { id: user.id },
+      },
     },
   });
 

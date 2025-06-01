@@ -68,10 +68,9 @@ Return only the rewritten text. Do not include any explanations, comments, or fo
       throw new Error('Failed to continue writing');
     }
   },
-  generatePlotIdea: async (genre: string, keywords: string): Promise<string> => {
+  generatePlotIdea: async (keywords: string): Promise<string> => {
     const promptText = `Generate an original and engaging plot idea based on the following input:
 
-Genre: ${genre}
 Keywords/Theme: ${keywords}
 
 The plot idea should be creative, concise, and inspiring for a story writer.

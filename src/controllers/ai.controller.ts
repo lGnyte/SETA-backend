@@ -37,19 +37,19 @@ export const continueWritingHandler = async (req: Request, res: Response): Promi
 
 export const generatePlotIdeaHandler = async (req: Request, res: Response): Promise<void> =>{
   try {
-    const { genre, keywords } = req.body;
+    const {keywords } = req.body;
 
-    if (!genre || typeof genre !== 'string') {
+    /*if (!genre || typeof genre !== 'string') {
       res.status(400).json({ error: 'Missing or invalid genre' });
       return;
-    }
+    }*/
 
     if (!keywords || typeof keywords !== 'string') {
       res.status(400).json({ error: 'Missing or invalid keywords' });
       return;
     }
 
-    const plotIdea = await AIService.generatePlotIdea(genre, keywords);
+    const plotIdea = await AIService.generatePlotIdea( keywords);
     res.json({ plotIdea });
   } catch (error) {
     console.error('Plot idea endpoint error:', error);

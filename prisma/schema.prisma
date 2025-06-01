@@ -69,13 +69,14 @@ model Tag {
 }
 
 model Chapter {
-  id       Int       @id @default(autoincrement())
-  bookId   Int
-  order    Int       @default(0)
-  title    String
-  content  String
-  summary  String?
-  deadline DateTime?
+  id         Int       @id @default(autoincrement())
+  bookId     Int
+  order      Int       @default(0)
+  title      String
+  content    String
+  isFinished Boolean   @default(false)
+  summary    String?
+  deadline   DateTime?
 
   book           Book          @relation(fields: [bookId], references: [id])
   contributors   User[]        @relation("UserChapterContributions")

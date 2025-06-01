@@ -7,7 +7,8 @@ import {
     getChapterEditRequestersController,
     approveChapterEditRequestController,
     denyEditAccessRequestController,
-    connectPartsController
+    connectPartsController,
+    finishChapterController
 } from '../controllers/chapter.controller';
 
 import {getChapterPartsController,createChapterPartController} from '../controllers/chapterPart.controller';
@@ -17,6 +18,7 @@ const router = Router();
 
 router.get('/:id', getChapterByIdController);
 router.put('/:id', updateChapterController);
+router.get('/:id/finish', finishChapterController);
 router.delete('/:id', deleteChapterController);
 
 router.post('/:id/parts', authenticate, createChapterPartController)

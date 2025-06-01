@@ -10,6 +10,7 @@ export const getChapterById = async (id: number) => {
             chapterParts: { orderBy: { order: 'asc' } },
             editRequesters: true,
             contributors: true,
+            book:true
         },
     });
 };
@@ -136,3 +137,21 @@ export const ensureChapterExists = async (id: number) => {
     return chapter;
 };
 
+export const finishChapter = async (id: number) => {
+    // Check if chapter exists
+    const chapter = await prisma.chapter.findUnique({
+        where: { id }
+    });
+
+    if (!chapter) {
+        throw new Error(`Chapter with id ${id} not found`);
+    }
+
+    // Update chapter to set finished = true
+    const updatedChapter = await prisma.chapter.update({
+        where: { id },
+        data: { isFinished: true }
+    });
+
+    return updatedChapter;
+};

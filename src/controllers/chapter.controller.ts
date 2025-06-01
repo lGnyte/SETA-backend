@@ -37,6 +37,22 @@ export const updateChapterController = async (req: Request, res: Response): Prom
     }
 };
 
+export const finishChapterController = async (req: Request, res: Response): Promise<void> => {
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+        sendResponse(res, null, false, 'Invalid chapter ID', 400);
+        return;
+    }
+
+    try {
+        const chapter = await ChapterService.finishChapter(id);
+        sendResponse(res, chapter);
+    } catch (err) {
+        console.error(`[PUT /chapters/${id}]`, err);
+        sendResponse(res, null, false, `Failed to update chapter. Reason: ${err instanceof Error ? err.message : String(err)}`, 400);
+    }
+};
+
 export const deleteChapterController = async (req: Request, res: Response): Promise<void> => {
     const id = Number(req.params.id);
     if (isNaN(id)) {

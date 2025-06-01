@@ -5,7 +5,8 @@ import {
     requestChapterEditAccess,
     getChapterEditRequesters,
     approveChapterEditRequest,
-    denyEditAccessRequest, ensureChapterExists
+    denyEditAccessRequest, ensureChapterExists,
+    finishChapter
 } from '../repositories/chapter.repository';
 import { Prisma } from '../generated/prisma';
 import {ChapterPartRepository} from "../repositories/chapterPart.repository";
@@ -26,5 +27,6 @@ export const ChapterService = {
         let chapterContent = await AIService.bindChapterParts(contents);
 
         await updateChapter(chapterId, { content: chapterContent });
-    }
+    },
+    finishChapter : (chapterId:number) => finishChapter(chapterId)
 }

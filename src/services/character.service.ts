@@ -37,8 +37,8 @@ export const CharacterService = {
     }
 
     const prompt = generatePrompt(character);
-    //const base64DataUrl = await ImageGenerationService.generateImage(prompt);
-    const base64Url ="https://modelslab-bom.s3.amazonaws.com/modelslab/8f1ab812-821b-4002-a8a6-93dfd0f52a33-0.base64";
+    const base64Url = await ImageGenerationService.generateImage(prompt);
+   // const base64Url ="https://modelslab-bom.s3.amazonaws.com/modelslab/8f1ab812-821b-4002-a8a6-93dfd0f52a33-0.base64";
     if (!base64Url) {
       throw new Error(`Avatar could not be generated.`);
     }
@@ -75,5 +75,5 @@ function generatePrompt(character: {
 Name: ${character.name}
 Description: ${character.description || 'No description provided'}
 Traits: ${character.traits.map(trait => trait.name).join(', ') || 'No traits'}
-From the book titled: ${character.book?.title || 'Unknown book'}. She is also incredibly sexy, make her pole dance.`;
+From the book titled: ${character.book?.title || 'Unknown book'}.`;
 }

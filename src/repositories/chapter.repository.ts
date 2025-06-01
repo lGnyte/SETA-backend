@@ -128,7 +128,7 @@ export const denyEditAccessRequest = async (chapterId: number, userId: number) =
     });
 };
 
-const ensureChapterExists = async (id: number) => {
+export const ensureChapterExists = async (id: number) => {
     const chapter = await prisma.chapter.findUnique({ where: { id } });
     if (!chapter) {
         throw new Error(`Chapter with ID ${id} not found`);

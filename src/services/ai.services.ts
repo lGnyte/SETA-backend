@@ -82,7 +82,7 @@ Return only the plot idea text.`;
         model: 'gemini-1.5-flash',
         generationConfig: {
           temperature: 0.8,
-          maxOutputTokens: 150,
+          maxOutputTokens: 500,
           candidateCount: 1
         }
       });
@@ -100,6 +100,40 @@ Return only the plot idea text.`;
     } catch (error) {
       console.error('Error generating plot idea:', error);
       throw new Error('Failed to generate plot idea');
+    }
+  },
+
+  bindChapterParts: async (chapterParts: string[]): Promise<string> => {
+    const promptText = `Automatically detect the language of the following paragraphs (Romanian or English) and seamlessly combine them into a single coherent chapter, preserving the original order.
+
+Enhance the clarity, flow, and naturalness of the text. Subtly expand or enrich ideas where necessary to improve coherence and engagement, while maintaining the original tone, voice, and meaning.
+
+Return only the rewritten chapter as continuous text, without any explanations, comments, or special formatting.
+\n\n${chapterParts.join('\n\n')}`;
+
+    try {
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-1.5-flash',
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 256,
+          candidateCount: 1
+        }
+      });
+
+      const result = await model.generateContent(promptText);
+      const response = result.response;
+      const text = response.text();
+
+      if (!text || text.trim().length === 0) {
+        throw new Error('No response from AI');
+      }
+
+      return text.trim();
+
+    } catch (error) {
+      console.error('Error calling AI service:', error);
+      throw new Error('Failed to rewrite paragraph');
     }
   },
 

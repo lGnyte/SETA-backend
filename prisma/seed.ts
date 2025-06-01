@@ -2,7 +2,9 @@ import { PrismaClient } from '../src/generated/prisma';
 
 const prisma = new PrismaClient();
 
+
 async function main() {
+  // Seed users
   const users = [
     {
       email: 'alice@example.com',
@@ -24,8 +26,31 @@ async function main() {
     });
   }
 
-  console.log('Seeding complete');
+  const genres = [
+    { name: 'Fantasy' },
+    { name: 'Science Fiction' },
+    { name: 'Romance' },
+    { name: 'Mystery' },
+    { name: 'Thriller' },
+    { name: 'Non-Fiction' },
+  ];
+
+  for (const genre of genres) {
+    const existing = await prisma.genre.findFirst({
+      where: { name: genre.name },
+    });
+
+    if (!existing) {
+      await prisma.genre.create({ data: genre });
+      console.log(`Created genre: ${genre.name}`);
+    } else {
+      console.log(`Genre already exists: ${genre.name}`);
+    }
+  }
+
+  console.log('Genre seeding complete');
 }
+
 
 main()
   .catch((e) => {

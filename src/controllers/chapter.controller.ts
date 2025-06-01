@@ -63,13 +63,13 @@ export const requestChapterEditAccessController = async (req: Request, res: Resp
 
     const chapterId = Number(req.params.id);
     if (isNaN(chapterId)) {
-        res.status(400).json({message: 'Invalid chapter ID'});
+        sendResponse(res, null, false, 'Invalid chapter ID', 400);
         return;
     }
 
     try {
         await ChapterService.requestChapterEditAccess(chapterId, userId);
-        res.status(204).send();
+        sendResponse(res, null, true, 'Request sent', 204)
     } catch (err) {
         console.error(`[GET /chapters/${chapterId}/requestEdit]`, err);
         sendResponse(res, null, false, `Failed to request edit access to chapter. Reason: ${err instanceof Error ? err.message : String(err)}`, 400);

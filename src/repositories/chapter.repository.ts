@@ -10,6 +10,7 @@ export const getChapterById = async (id: number) => {
             chapterParts: { orderBy: { order: 'asc' } },
             editRequesters: true,
             contributors: true,
+            book: true
         },
     });
 };

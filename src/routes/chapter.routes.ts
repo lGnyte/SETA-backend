@@ -23,7 +23,7 @@ router.post('/:id/parts', authenticate, createChapterPartController)
 router.get('/:id/parts', getChapterPartsController);
 
 // request edit
-router.get('/:id/requestEdit', authenticate, requestChapterEditAccessController)
+router.post('/:id/requestEdit', authenticate, requestChapterEditAccessController)
 router.get('/:id/editRequesters', authenticate, getChapterEditRequestersController)
 
 router.post('/:id/approveEdit/:userId', authenticate, approveChapterEditRequestController)

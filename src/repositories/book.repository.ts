@@ -35,14 +35,19 @@ export const BookRepository = {
                     orderBy: { order: 'asc' },
                 },
                 characters: true,
+                owner: {
+                    select: {
+                        username: true,
+                    }
+                }
             },
         });
     },
 
     getByOwnerId: async (ownerId: number) => {
-        return await prisma.book.findMany({
-            where: { ownerId },
-            orderBy: { createdAt: 'desc' },
+        return prisma.book.findMany({
+            where: {ownerId},
+            orderBy: {createdAt: 'desc'},
             include: {
                 genres: true,
                 tags: true,

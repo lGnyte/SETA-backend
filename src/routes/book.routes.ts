@@ -21,6 +21,7 @@ import {authenticate} from "../middlewares/auth.middleware";
 
 const router = Router();
 
+router.get('/mine', authenticate, getMyBooks);
 router.get('/', getAllBooksController);
 router.get('/:id', getBookByIdController);
 router.post('/', createBookController);
@@ -34,6 +35,5 @@ router.get('/:id/characters', getCharactersByBookIdController);
 router.post('/:id/tags', assignTagsController);
 router.post('/:id/genres', assignGenresController);
 router.post('/:id/cover', uploadBookCoverController);
-router.get('/mybooks', authenticate, getMyBooks);
 
 export default router;

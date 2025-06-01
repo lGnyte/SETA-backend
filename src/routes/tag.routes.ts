@@ -4,6 +4,6 @@ import { getAllTagsController, createTagController } from '../controllers/tag.co
 const router = Router();
 
 router.get('/', getAllTagsController);
-router.post('/tags', createTagController);
+router.post('/', createTagController);
 
 export default router;

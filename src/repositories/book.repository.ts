@@ -1,9 +1,9 @@
-import { PrismaClient, Prisma } from '../generated/prisma';
+import {PrismaClient, Prisma} from '../generated/prisma';
 
 const prisma = new PrismaClient();
 
-async function ensureBookExists(bookId: number) {
-    const exists = await prisma.book.findUnique({ where: { id: bookId }, select: { id: true } });
+export const ensureBookExists = async (bookId: number) => {
+    const exists = await prisma.book.findUnique({where: {id: bookId}, select: {id: true}});
     if (!exists) {
         throw new Error(`Book with ID ${bookId} not found`);
     }
@@ -22,12 +22,12 @@ export const BookRepository = {
     getById: async (id: number) => {
         await ensureBookExists(id);
         return prisma.book.findUnique({
-            where: { id },
+            where: {id},
             include: {
                 genres: true,
                 tags: true,
                 chapters: {
-                    orderBy: { order: 'asc' },
+                    orderBy: {order: 'asc'},
                 },
                 characters: true,
             },
@@ -48,7 +48,7 @@ export const BookRepository = {
     update: async (id: number, data: Prisma.BookUpdateInput) => {
         await ensureBookExists(id);
         return prisma.book.update({
-            where: { id },
+            where: {id},
             data,
             include: {
                 genres: true,
@@ -61,13 +61,13 @@ export const BookRepository = {
 
     delete: async (id: number) => {
         await ensureBookExists(id);
-        return prisma.book.delete({ where: { id } });
+        return prisma.book.delete({where: {id}});
     },
 
     patch: async (id: number, data: Prisma.BookUpdateInput) => {
         await ensureBookExists(id);
         return prisma.book.update({
-            where: { id },
+            where: {id},
             data,
         });
     },
@@ -79,7 +79,7 @@ export const BookRepository = {
 
         if (!orderToSet || orderToSet === 0) {
             const chapterCount = await prisma.chapter.count({
-                where: { bookId },
+                where: {bookId},
             });
             orderToSet = chapterCount + 1;
         }
@@ -88,7 +88,7 @@ export const BookRepository = {
             data: {
                 ...chapterData,
                 order: orderToSet,
-                book: { connect: { id: bookId } },
+                book: {connect: {id: bookId}},
             },
         });
     },
@@ -96,7 +96,7 @@ export const BookRepository = {
     getChapters: async (bookId: number) => {
         await ensureBookExists(bookId);
         return prisma.chapter.findMany({
-            where: { bookId },
+            where: {bookId},
             include: {
                 characters: true,
             },
@@ -106,7 +106,7 @@ export const BookRepository = {
     getCharactersByBookId: async (bookId: number) => {
         await ensureBookExists(bookId);
         return prisma.character.findMany({
-            where: { bookId },
+            where: {bookId},
             include: {
                 traits: true,
                 book: true,
@@ -117,11 +117,11 @@ export const BookRepository = {
     assignTags: async (bookId: number, tagIds: number[]) => {
         await ensureBookExists(bookId);
         return prisma.book.update({
-            where: { id: bookId },
+            where: {id: bookId},
             data: {
                 tags: {
                     set: [],
-                    connect: tagIds.map((id) => ({ id })),
+                    connect: tagIds.map((id) => ({id})),
                 },
             },
         });
@@ -130,11 +130,11 @@ export const BookRepository = {
     assignGenres: async (bookId: number, genreIds: number[]) => {
         await ensureBookExists(bookId);
         return prisma.book.update({
-            where: { id: bookId },
+            where: {id: bookId},
             data: {
                 genres: {
                     set: [],
-                    connect: genreIds.map((id) => ({ id })),
+                    connect: genreIds.map((id) => ({id})),
                 },
             },
         });

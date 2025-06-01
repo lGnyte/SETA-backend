@@ -134,3 +134,19 @@ export const denyEditAccessRequestController = async (req: Request, res: Respons
         sendResponse(res, null, false, `Failed to deny edit access to chapter. Reason: ${err instanceof Error ? err.message : String(err)}`, 500);
     }
 }
+
+export const connectPartsController = async (req: Request, res: Response) => {
+    const chapterId = Number(req.params.id);
+    if (isNaN(chapterId)) {
+        sendResponse(res, null, false, 'Invalid chapter ID', 400);
+        return;
+    }
+
+    try {
+        const result = await ChapterService.connectParts(chapterId);
+        sendResponse(res, result);
+    } catch (err) {
+        console.error(`[Get /chapters/${chapterId}/connectParts}]`, err);
+        sendResponse(res, null, false, `Failed to connect chapter parts. Reason: ${err instanceof Error ? err.message : String(err)}`, 500);
+    }
+}
